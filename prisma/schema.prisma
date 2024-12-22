@@ -18,6 +18,8 @@ model User {
   name     String
   email    String @unique
   password String
+
+  learners Purchase[]
 }
 
 model Admin {
@@ -25,4 +27,28 @@ model Admin {
   name     String
   email    String @unique
   password String
+
+  courses Course[]
+}
+
+model Course {
+  id          String @id @default(cuid())
+  title       String @unique
+  description String
+  price       Int
+  imageURL    String @unique
+
+  creator   Admin  @relation(fields: [creatorID], references: [id])
+  creatorID String
+
+  purchases Purchase[]
+}
+
+model Purchase {
+  id String @id @default(cuid())
+
+  course   Course? @relation(fields: [courseID], references: [id])
+  courseID String
+
+  purchasedBy User[]
 }
